@@ -22,13 +22,13 @@ module.exports = {
   getPost: async (req, res) => {
     try {
       const post = await Post.findById(req.params.id);
-    //   const comments = await Comment.find({post: req.params.id}).sort({ createdAt: "desc" }).lean();
-      const comments = await Comment.find({post: req.params.id}).sort({ createdAt: "desc" })
-      .populate({
-        path: 'user',  // Populate the 'user' field
-        select: 'userName', // Select only the 'name' field from the User model
-      })
-      .exec();
+      // populate 'user' gets the details of each commented
+      const comments = await Comment.find({post: req.params.id}).sort({ createdAt: "desc" }).populate('user')
+      // .populate({
+      //   path: 'user',  // Populate the 'user' field
+      //   select: 'userName', // Select only the 'name' field from the User model
+      // })
+      // .exec();
       console.log(comments)
       res.render("post.ejs", { post: post, user: req.user , comments: comments, user: req.user});
     } catch (err) {
